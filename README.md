@@ -101,18 +101,28 @@
       margin-top: 30px;
       display: none;
     }
+
+    textarea {
+      width: 80%;
+      height: 100px;
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1 id="title">Надад болзоонд явах уу? 💌</h1>
+  <h1 id="title">Надад болзоонд явах уу, Номио? 💌</h1>
   <div class="button-group" id="invite">
     <button onclick="startQuestions()">Тийм</button>
-    <button onclick="decline()">Үгүй</button>
+    <button onclick="forceYes()">Үгүй</button>
   </div>
 
   <div id="q1" class="container">
     <h2>1. Ямар хоолонд дуртай вэ?</h2>
-    <button onclick="nextQuestion(1, 'Итали')">Итали</button>
+    <button onclick="nextQuestion(1, 'Хятад')">Хятад</button>
     <button onclick="nextQuestion(1, 'Япон')">Япон</button>
     <button onclick="nextQuestion(1, 'Монгол')">Монгол</button>
   </div>
@@ -122,6 +132,7 @@
     <button onclick="nextQuestion(2, 'Кафе')">Кафе</button>
     <button onclick="nextQuestion(2, 'Кино театр')">Кино театр</button>
     <button onclick="nextQuestion(2, 'Гадаа алхах')">Гадаа алхах</button>
+    <button onclick="nextQuestion(2, 'Бүгд')">Бүгд</button>
   </div>
 
   <div id="q3" class="container">
@@ -131,9 +142,15 @@
   </div>
 
   <div id="q4" class="container">
-    <h2>4. Чи намайг хөөрхөн гэж боддог уу? 😳</h2>
-    <button onclick="nextQuestion(4, 'Мэдээж!')">Мэдээж!</button>
-    <button onclick="nextQuestion(4, 'Хөөрхөн бас хөөрхөн 😄')">Хөөрхөн бас хөөрхөн 😄</button>
+    <h2>4. Болзооны үеэр өөр ямар сонирхолтой зүйл хийх вэ?</h2>
+    <textarea id="input-q4" placeholder="Санаагаа энд бичнэ үү..."></textarea><br>
+    <button onclick="nextTextAnswer(4)">Дараах</button>
+  </div>
+
+  <div id="q5" class="container">
+    <h2>5. Чи намайг хөөрхөн гэж боддог уу? 😳</h2>
+    <button onclick="nextQuestion(5, 'Мэдээж!')">Мэдээж!</button>
+    <button onclick="nextQuestion(5, 'Хөөрхөн бас хөөрхөн 😄')">Хөөрхөн бас хөөрхөн 😄</button>
   </div>
 
   <div id="summary" class="container">
@@ -142,6 +159,7 @@
     <p id="a2"></p>
     <p id="a3"></p>
     <p id="a4"></p>
+    <p id="a5"></p>
   </div>
 
   <script>
@@ -153,19 +171,26 @@
       document.getElementById("q1").classList.add("active");
     }
 
-    function decline() {
-      document.getElementById("title").textContent = "Харамсалтай байна 😢";
-      document.getElementById("invite").style.display = "none";
+    function forceYes() {
+      alert("Буруу дарсан юм шиг байна, Тийм гэж ойлголоо! 😄");
+      startQuestions();
     }
 
     function nextQuestion(num, answer) {
       answers[`q${num}`] = answer;
       document.getElementById(`q${num}`).classList.remove("active");
-      if (num < 4) {
-        document.getElementById(`q${num + 1}`).classList.add("active");
+      if (num === 4) {
+        document.getElementById("q5").classList.add("active");
       } else {
-        showSummary();
+        document.getElementById(`q${num + 1}`).classList.add("active");
       }
+    }
+
+    function nextTextAnswer(num) {
+      const value = document.getElementById("input-q4").value.trim();
+      answers[`q${num}`] = value || "Хоосон";
+      document.getElementById(`q${num}`).classList.remove("active");
+      document.getElementById("q5").classList.add("active");
     }
 
     function showSummary() {
@@ -173,7 +198,18 @@
       document.getElementById("a1").textContent = `1. Дуртай хоол: ${answers.q1}`;
       document.getElementById("a2").textContent = `2. Болзооны газар: ${answers.q2}`;
       document.getElementById("a3").textContent = `3. Гэнэтийн бэлэг: ${answers.q3}`;
-      document.getElementById("a4").textContent = `4. Миний тухай бодол: ${answers.q4}`;
+      document.getElementById("a4").textContent = `4. Санал: ${answers.q4}`;
+      document.getElementById("a5").textContent = `5. Миний тухай бодол: ${answers.q5}`;
+    }
+
+    function nextQuestion(num, answer) {
+      answers[`q${num}`] = answer;
+      document.getElementById(`q${num}`).classList.remove("active");
+      if (num < 5) {
+        document.getElementById(`q${num + 1}`).classList.add("active");
+      } else {
+        showSummary();
+      }
     }
 
     // Сайхан зүрхнүүд
