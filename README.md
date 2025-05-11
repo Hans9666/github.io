@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="mn">
 <head>
   <meta charset="UTF-8">
@@ -111,10 +110,33 @@
       border: 1px solid #ccc;
       font-size: 1rem;
     }
+
+    .sparkle {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(white, transparent);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: sparkle 5s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1 id="title">Надад болзоонд явах уу, Номио? 💌</h1>
+  <h1 id="title">Надтай болзоонд явах уу, Номио? 💌</h1>
   <div class="button-group" id="invite">
     <button onclick="startQuestions()">Тийм</button>
     <button onclick="forceYes()">Үгүй</button>
@@ -148,13 +170,13 @@
   </div>
 
   <div id="q5" class="container">
-    <h2>5. Чи намайг хөөрхөн гэж боддог уу? 😳</h2>
-    <button onclick="nextQuestion(5, 'Мэдээж!')">Мэдээж!</button>
-    <button onclick="nextQuestion(5, 'Хөөрхөн бас хөөрхөн 😄')">Хөөрхөн бас хөөрхөн 😄</button>
+    <h2>5. Болзоо хэзээ вэ? 📅</h2>
+    <button onclick="nextQuestion(5, 'Хагас сайн')">Хагас сайн</button>
+    <button onclick="nextQuestion(5, 'Бүтэн сайн')">Бүтэн сайн</button>
   </div>
 
   <div id="summary" class="container">
-    <h2>💘 Болзооны хариултууд:</h2>
+    <h2>💘 Хүлээж тэсэхгүй нь!</h2>
     <p id="a1"></p>
     <p id="a2"></p>
     <p id="a3"></p>
@@ -179,10 +201,10 @@
     function nextQuestion(num, answer) {
       answers[`q${num}`] = answer;
       document.getElementById(`q${num}`).classList.remove("active");
-      if (num === 4) {
-        document.getElementById("q5").classList.add("active");
-      } else {
+      if (num < 5) {
         document.getElementById(`q${num + 1}`).classList.add("active");
+      } else {
+        showSummary();
       }
     }
 
@@ -199,26 +221,26 @@
       document.getElementById("a2").textContent = `2. Болзооны газар: ${answers.q2}`;
       document.getElementById("a3").textContent = `3. Гэнэтийн бэлэг: ${answers.q3}`;
       document.getElementById("a4").textContent = `4. Санал: ${answers.q4}`;
-      document.getElementById("a5").textContent = `5. Миний тухай бодол: ${answers.q5}`;
+      document.getElementById("a5").textContent = `5. Болзоо хэзээ: ${answers.q5}`;
     }
 
-    function nextQuestion(num, answer) {
-      answers[`q${num}`] = answer;
-      document.getElementById(`q${num}`).classList.remove("active");
-      if (num < 5) {
-        document.getElementById(`q${num + 1}`).classList.add("active");
-      } else {
-        showSummary();
-      }
-    }
-
-    // Сайхан зүрхнүүд
+    // Зүрхнүүд
     for (let i = 0; i < 30; i++) {
       const heart = document.createElement('div');
       heart.className = 'heart';
       heart.style.left = Math.random() * 100 + 'vw';
       heart.style.animationDuration = (2 + Math.random() * 4) + 's';
       document.body.appendChild(heart);
+    }
+
+    // Гялтганасан од
+    for (let i = 0; i < 40; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.animationDuration = (3 + Math.random() * 3) + 's';
+      sparkle.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(sparkle);
     }
   </script>
 </body>
